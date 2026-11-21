@@ -13,3 +13,23 @@ export const getWorkouts = async (req, res) => {
         res.status(500).json({ message: 'Something went wrong!' });
     }
 }
+
+export const createWorkouts = async (req, res) => {
+    const { title, load, reps } = req.body;
+
+    if (!title || load === undefined || reps === undefined) {
+        return res.status(400).json({ message: 'All the fields are mandatory!' })
+    }
+
+    try {
+        const workout = await Workout.create({ title, load, reps });
+
+        res.status(201).json({ message: 'Workout created succesfully!', workout });
+    } catch (error) {
+        if(error.name === 'ValidationError') {
+             return res.status(400).json({ message: error.message });
+        }
+        console.error(error);
+        res.status(500).json({ message: 'Something went wrong!' });
+    }
+}
