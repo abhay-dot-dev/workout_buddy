@@ -1,15 +1,9 @@
 import 'dotenv/config';
+import app from './app.js';
 import express from 'express';
 import connectDB from '../config/db.js';
 
-const app = express();
-
 const PORT = process.env.PORT;
-
-// Home route
-app.get('/', (req, res) => {
-    res.status(200).json({message: "Hello, workout buddy!"});
-})
 
 const startServer = async () => {
     try {
