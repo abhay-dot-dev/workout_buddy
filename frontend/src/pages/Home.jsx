@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { getWorkouts } from "../services/workoutService.js"
 import WorkoutDetails from "../components/WorkoutDetails.jsx"
+import WorkoutForm from "../components/WorkoutForm.jsx";
 
 const Home = () => {
 
@@ -19,12 +20,22 @@ const Home = () => {
     }, [])
 
     return (
-        <div>
-            {
-                workouts && workouts.map((workout) => (
-                    <WorkoutDetails workout={workout} key={workout._id} />
-                ))
-            }
+        <div className="max-w-6xl mx-auto p-6">
+            <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-30">
+                <div className="space-y-4">
+                    {
+                        workouts && workouts.map((workout) => (
+                            <WorkoutDetails workout={workout} key={workout._id} />
+                        ))
+                    }
+                </div>
+                <WorkoutForm
+                    onWorkoutCreated={
+                        (workout) => setWorkouts(
+                            (prev) => [workout, ...prev]
+                        )}
+                />
+            </div>
         </div>
     )
 }
