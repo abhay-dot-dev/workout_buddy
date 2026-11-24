@@ -3,7 +3,7 @@ import Home from './pages/Home'
 
 function App() {
   return (
-    <div>
+    <div className='bg-gray-100 min-h-screen'>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Home/>} />
