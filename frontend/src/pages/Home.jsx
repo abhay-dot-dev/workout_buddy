@@ -1,23 +1,26 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { getWorkouts } from "../services/workoutService.js"
+import { useWorkoutContext } from "../hooks/useWorkoutContext.js"
+
+import WorkoutForm from "../components/WorkoutForm.jsx"
 import WorkoutDetails from "../components/WorkoutDetails.jsx"
-import WorkoutForm from "../components/WorkoutForm.jsx";
 
 const Home = () => {
 
-    const [workouts, setWorkouts] = useState([]);
+    const { workouts, dispatch } = useWorkoutContext();
 
     useEffect(() => {
         const fetchWorkouts = async () => {
             try {
-                setWorkouts(await getWorkouts());
+                const data = await getWorkouts();
+                dispatch({ type: 'SET_WORKOUT', payload: data });
             } catch (error) {
                 console.error(error.response?.data?.message || error.message);
             }
         };
 
         fetchWorkouts();
-    }, [])
+    }, [dispatch])
 
     return (
         <div className="max-w-6xl mx-auto p-6">
@@ -29,12 +32,7 @@ const Home = () => {
                         ))
                     }
                 </div>
-                <WorkoutForm
-                    onWorkoutCreated={
-                        (workout) => setWorkouts(
-                            (prev) => [workout, ...prev]
-                        )}
-                />
+                <WorkoutForm />
             </div>
         </div>
     )

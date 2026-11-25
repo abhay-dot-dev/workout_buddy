@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { createWorkout } from '../services/workoutService';
+import { useWorkoutContext } from '../hooks/useWorkoutContext';
 
-const WorkoutForm = ({ onWorkoutCreated }) => {
+const WorkoutForm = () => {
+    const {dispatch} = useWorkoutContext();
+
     const [reps, setReps] = useState('');
     const [load, setLoad] = useState('');
     const [title, setTitle] = useState('');
@@ -18,7 +21,7 @@ const WorkoutForm = ({ onWorkoutCreated }) => {
             setLoad('');
             setTitle('');
             setError('');
-            onWorkoutCreated(newWorkout);
+            dispatch({type: 'CREATE_WORKOUT', payload: newWorkout})
         } catch (err) {
             setError(err.response?.data?.message || err.message);
         }
