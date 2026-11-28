@@ -3,7 +3,7 @@ import { createWorkout } from '../services/workoutService';
 import { useWorkoutContext } from '../hooks/useWorkoutContext';
 
 const WorkoutForm = () => {
-    const {dispatch} = useWorkoutContext();
+    const { dispatch } = useWorkoutContext();
 
     const [reps, setReps] = useState('');
     const [load, setLoad] = useState('');
@@ -13,6 +13,17 @@ const WorkoutForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // handled error so the message should be more user-centric
+        if (!title.trim() || load === '' || reps === '') {
+            setError('Please fill in the title, load and reps');
+            return;
+        }
+
+        if (Number(reps) < 1) {
+            setError('Reps must be at least 1');
+            return;
+        }
+
         try {
             const workout = { title, load: Number(load), reps: Number(reps) };
             const newWorkout = await createWorkout(workout);
@@ -21,7 +32,7 @@ const WorkoutForm = () => {
             setLoad('');
             setTitle('');
             setError('');
-            dispatch({type: 'CREATE_WORKOUT', payload: newWorkout})
+            dispatch({ type: 'CREATE_WORKOUT', payload: newWorkout })
         } catch (err) {
             setError(err.response?.data?.message || err.message);
         }
